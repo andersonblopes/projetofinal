@@ -1,3 +1,9 @@
+//******************************************************
+//Instituto Federal de São Paulo - Campus Sertãozinho
+//Disciplina......: M4DADM
+//Programação de Computadores e Dispositivos Móveis
+//Aluno...........: Anderson Benigno Lopes
+//******************************************************
 package com.example.ander.projetofinal.model;
 
 /**
@@ -11,6 +17,7 @@ public class PessoaFisica {
     private String telefone;
     private String email;
 
+    //Construtor definido para popular atributos do objeto
     public PessoaFisica(String nome, String cpf, String idade, String telefone, String email) {
         this.nome = nome;
         this.cpf = cpf;
@@ -18,6 +25,14 @@ public class PessoaFisica {
         this.telefone = telefone;
         this.email = email;
     }
+
+    //Método foi subscrito para facilitar exibição de item da listagem obtida do banco de dados
+    @Override
+    public String toString() {
+        return "Nome: " + getNome() + "\nCPF: " + getCpf() + "\nIdade: " + getIdade() + "\nTelefone: " + getTelefone() + "\ne-mail: " + getEmail();
+    }
+
+    //GETTERS E SETS
 
     public String getNome() {
         return nome;

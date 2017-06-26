@@ -1,3 +1,9 @@
+//******************************************************
+//Instituto Federal de São Paulo - Campus Sertãozinho
+//Disciplina......: M4DADM
+//Programação de Computadores e Dispositivos Móveis
+//Aluno...........: Anderson Benigno Lopes
+//******************************************************
 package com.example.ander.projetofinal.util;
 
 import android.content.Context;
@@ -15,6 +21,8 @@ import java.util.List;
  * Created by ander on 19/06/2017.
  */
 public class DBHelper {
+
+    //Atributos para ações na base de dados
     private static final String DATABASE_NAME = "meubancodedados.db";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_NAME = "pessoa_fisica";
@@ -22,6 +30,8 @@ public class DBHelper {
     private Context context;
     private SQLiteDatabase db;
     private SQLiteStatement insertStmt;
+
+    //SQL de inserção
     private static final String INSERT = " INSERT INTO " + TABLE_NAME + " (nome, cpf, idade, telefone, email) VALUES (?,?,?,?,?)";
 
     public DBHelper(Context context) {
@@ -31,6 +41,7 @@ public class DBHelper {
         this.insertStmt = this.db.compileStatement(INSERT);
     }
 
+    //Método para popular statement que contém a query de inserção
     public long insert(PessoaFisica pessoaFisica) {
         this.insertStmt.bindString(1, pessoaFisica.getNome());
         this.insertStmt.bindString(2, pessoaFisica.getCpf());
@@ -40,6 +51,7 @@ public class DBHelper {
         return this.insertStmt.executeInsert();
     }
 
+    //Método para limpeza de banco de dados
     public void deleteAll() {
         this.db.delete(TABLE_NAME, null, null);
     }

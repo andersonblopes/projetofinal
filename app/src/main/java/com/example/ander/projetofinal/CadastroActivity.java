@@ -1,16 +1,31 @@
+//******************************************************
+//Instituto Federal de São Paulo - Campus Sertãozinho
+//Disciplina......: M4DADM
+//Programação de Computadores e Dispositivos Móveis
+//Aluno...........: Anderson Benigno Lopes
+//******************************************************
 package com.example.ander.projetofinal;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.ander.projetofinal.model.PessoaFisica;
 import com.example.ander.projetofinal.util.DBHelper;
+
+import java.util.List;
 
 public class CadastroActivity extends AppCompatActivity {
 
+    //Atributo responsável pelas ações da camada do banco de dados
     private DBHelper dbHelper;
+
+    private PessoaFisica pessoa;
 
     private EditText etNome, etCPF, etIdade, etTelefone, etEmail;
     private Button btnListar, btnCadastrarPessoa, btnVoltar;
@@ -20,32 +35,65 @@ public class CadastroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
-        popularObjetos();
+        popularObjetosView();
 
         btnCadastrarPessoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(validarCamposPreenchidos()){
+                    popularPessoaFisica();
+                    dbHelper.insert(pessoa);
+                    AlertDialog.Builder adb = new AlertDialog.Builder(CadastroActivity.this);
+                    adb.setTitle("Sucesso!");
+                    adb.setMessage("Registro inserido com sucesso!");
+                    adb.show();
+                }else{
+                    AlertDialog.Builder adb = new AlertDialog.Builder(CadastroActivity.this);
+                    adb.setTitle("Erro!");
+                    adb.setMessage("Todos os campos devem ser preenchidos!");
+                    adb.show();
+                }
+                limparCampos();
             }
         });
 
         btnListar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                List<PessoaFisica> pessoas = dbHelper.queryGetAll();
+                if (pessoas == null) {
+                    AlertDialog.Builder adb = new AlertDialog.Builder(CadastroActivity.this);
+                    adb.setTitle("Aviso!");
+                    adb.setMessage("Não há contatos cadastrados!");
+                    adb.show();
+                    return;
+                }
+                for (int posicao = 0; posicao < pessoas.size(); posicao++){
+                    AlertDialog.Builder adb = new AlertDialog.Builder(CadastroActivity.this);
+                    adb.setTitle("Pessoa Física: " + (posicao + 1));
+                    adb.setMessage(pessoas.get(posicao).toString());
+                    adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    adb.show();
+                }
             }
         });
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent();
+                intent.setClass(CadastroActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
-
     }
-
 
     public void limparCampos() {
         etNome.setText("");
@@ -53,9 +101,12 @@ public class CadastroActivity extends AppCompatActivity {
         etIdade.setText("");
         etTelefone.setText("");
         etEmail.setText("");
+
+        this.pessoa = null;
     }
 
-    public void popularObjetos() {
+    public void popularObjetosView() {
+
         this.dbHelper = new DBHelper(this);
 
         etNome = (EditText) findViewById(R.id.etNome);
@@ -67,5 +118,15 @@ public class CadastroActivity extends AppCompatActivity {
         btnListar = (Button) findViewById(R.id.btnListar);
         btnCadastrarPessoa = (Button) findViewById(R.id.btnCadastrarPessoa);
         btnVoltar = (Button) findViewById(R.id.btnVoltar);
+    }
+
+    public boolean validarCamposPreenchidos(){
+        return (etNome.getText().length() > 0 && etCPF.getText().length() > 0 && etIdade.getText().length() > 0 && etTelefone.getText().length() > 0 &&
+                etEmail.getText().length() > 0);
+    }
+
+    public void popularPessoaFisica(){
+        this.pessoa = new PessoaFisica(etNome.getText().toString(), etCPF.getText().toString(), etIdade.getText().toString(),
+                etTelefone.getText().toString(), etEmail.getText().toString());
     }
 }
