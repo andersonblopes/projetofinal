@@ -34,6 +34,7 @@ public class DBHelper {
     //SQL de inserção
     private static final String INSERT = " INSERT INTO " + TABLE_NAME + " (nome, cpf, idade, telefone, email) VALUES (?,?,?,?,?)";
 
+    //Construtor para preparar objeto responsável pelas ações no banco de dados
     public DBHelper(Context context) {
         this.context = context;
         OpenHelper openHelper = new OpenHelper(this.context);

@@ -35,8 +35,10 @@ public class CadastroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
+        //Ação de preparar objetos utilizados na activity
         popularObjetosView();
 
+        //Ação ao clicar no botao inserir dados
         btnCadastrarPessoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +59,7 @@ public class CadastroActivity extends AppCompatActivity {
             }
         });
 
+        //Mostra a lista de pesssoas cadastradas com dialogo
         btnListar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +86,7 @@ public class CadastroActivity extends AppCompatActivity {
             }
         });
 
+        //Retorna para a activity principal do sistema
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +99,7 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
+    //Remove digitação de todos os campos
     public void limparCampos() {
         etNome.setText("");
         etCPF.setText("");
@@ -105,6 +110,7 @@ public class CadastroActivity extends AppCompatActivity {
         this.pessoa = null;
     }
 
+    //Prepara o objeto preenchido para cadastrar no banco
     public void popularObjetosView() {
 
         this.dbHelper = new DBHelper(this);
@@ -120,11 +126,13 @@ public class CadastroActivity extends AppCompatActivity {
         btnVoltar = (Button) findViewById(R.id.btnVoltar);
     }
 
+    //Torna campos obrigatórios
     public boolean validarCamposPreenchidos(){
         return (etNome.getText().length() > 0 && etCPF.getText().length() > 0 && etIdade.getText().length() > 0 && etTelefone.getText().length() > 0 &&
                 etEmail.getText().length() > 0);
     }
 
+    //Atribui valores ao objeto do modelo
     public void popularPessoaFisica(){
         this.pessoa = new PessoaFisica(etNome.getText().toString(), etCPF.getText().toString(), etIdade.getText().toString(),
                 etTelefone.getText().toString(), etEmail.getText().toString());
